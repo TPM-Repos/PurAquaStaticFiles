@@ -10,7 +10,7 @@
   --screen-lg: 60em;
   --screen-xl: 80em;
 
-  --color-neutral: #4299e1;
+  --color-neutral: #1979c3;
   --color-error: #e53e3e;
   --color-warning: #ed8936;
   --color-success: #48bb78;
@@ -23,15 +23,19 @@
 
   --accent-primary: #0053a0;
   --accent-secondary: #e2383f;
-  --accent-dark: #3d4b60;
+  --accent-dark: #6e716e;
 
-  --global-radius: 0.5em;
+  --header-color: #f4f4f4;
+
+  --global-radius: 3px;
   --shadow-light: 0 0.25em 0.5em rgba(0,0,0,.1);
+
+  --current-border-width: 10px;
 }
 
 body {
   background: #eee;
-  color: var(--accent-dark);
+  color: black;
   font-size: 16px;
   line-height: 1.4;
   font-family: "Open Sans", Arial, sans-serif;
@@ -45,10 +49,35 @@ textarea {
   font-size: 100%;
 }
 
+button {
+  padding: 1rem 1.25rem;
+  border-radius: 3px;
+  border: none;
+  background-color: var(--color-neutral);
+  color: #fff;
+  text-align: center;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color .3s ease,
+    filter .3s ease;
+}
+
+button:hover {
+  background-color: #006bb4;
+}
+
+button:disabled {
+  opacity: .25;
+  pointer-events: none;
+}
+
 button:not(.dw-controlButton):focus {
   outline: none;
   box-shadow: 0 0 0 2px var(--color-focus);
 }
+
+
 
 /* Typography */
 h1,
@@ -84,8 +113,8 @@ hr {
   left: 0;
   z-index: 200;
   width: 100%;
-  background-color: var(--accent-dark);
-  color: #fff;
+  background-color: var(--header-color);
+  color: var(--accent-dark);
 }
 
 .content-nav .logo {
@@ -105,7 +134,7 @@ hr {
   text-align: center;
   cursor: pointer;
   border: none;
-  border-radius: 100em;
+  border-radius: 3px;
   font-weight: 600;
   transition:
     background-color .3s ease,
@@ -120,7 +149,7 @@ hr {
   width: 15em;
   height: 100vh;
   overflow-y: auto;
-  background: #515d70;
+  background: var(--header-color);
   transform: translate3d(100%, 0, 0);
   transition: transform .3s ease;
   padding-top: 1em;
@@ -134,7 +163,7 @@ hr {
 .content-nav a {
   position: relative;
   padding: 1em 1.5em;
-  color: #fff;
+  color: black;
   text-decoration: none;
   font-size: 1.25em;
   transition:
@@ -167,7 +196,7 @@ hr {
   width: 1em;
   height: 1em;
   font-size: 1rem;
-  background-color: #fff;
+  background-color: var(--accent-dark);
   opacity: .2;
   transition: opacity .3s ease;
   clip-path: path('M12.73 7.38L5.4.26a.93.93 0 00-1.28 0l-.85.83a.86.86 0 000 1.24L9.06 8l-5.8 5.67a.86.86 0 000 1.24l.85.83c.36.35.93.35 1.28 0l7.33-7.12a.86.86 0 000-1.24z');
@@ -177,11 +206,13 @@ hr {
   width: 1em;
   height: 1em;
   margin-right: 1em;
-  opacity: .15;
+  color: var(--accent-dark);
+  /* opacity: .15; */
 }
 
 .content-nav li a.is-current {
-  border-left: 4px solid var(--color-neutral);
+  border-left: var(--current-border-width) solid var(--color-neutral);
+  padding: calc(30px - var(--current-border-width));
 }
 
 /* Form Running Actions (Actions/Transforms/Operations) */
@@ -200,11 +231,11 @@ hr {
 .content-nav .logout-button {
   width: 100%;
   padding: 1em 1.5em;
-  background-color: rgba(255,255,255,.1);
+  /* background-color: rgba(255,255,255,.1); */
   color: #fff;
 }
 .content-nav .logout-button:hover {
-  background-color: rgba(255,255,255,.15);
+  /* background-color: rgba(255,255,255,.15); */
 }
 
 .user-actions {
@@ -216,6 +247,14 @@ hr {
 
 .content-nav .logout-list {
   padding: 1.5em;
+}
+
+.content-inner {
+  background-image: url("../../img/brilliance.jpg");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
 }
 
 .user-actions .active-username {
@@ -238,14 +277,14 @@ hr {
 
 /* Mobile Menu Toggle */
 .nav-toggle {
-  color: #fff;
+  /* color: #fff; */
   align-self: center;
   padding: 1em;
   margin: .75em;
-  background-color: rgba(255,255,255,.1);
+  /* background-color: rgba(255,255,255,.1); */
 }
 .nav-toggle:hover {
-  background-color: rgba(255,255,255,.2);
+  /* background-color: rgba(255,255,255,.2); */
 }
 .nav-toggle svg {
   display: block;

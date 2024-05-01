@@ -2,18 +2,19 @@
 
 const config = {
     // the full path the site running the DriveWorks Live API
-    // serverUrl: "https://dw21api.yourdomain.com",
-    serverUrl: "",
+    // serverUrl: "https://dw21api.tpmautomation.com",
+    serverUrl: "http://localhost:81",
     // The default alias for the DriveWorks Group
     // This is a custom string that must match the name in the ConfigUser.xml file
-    groupAlias: "",
+    // groupAlias: "PurAquaDev",
+    groupAlias: "AC",
     // (Optional) Configure ping & update intervals - in seconds
     // A Specification will timeout after a configured period of inactivity (see DriveWorksConfigUser.xml).
     // This function prevents a Specification timing out as long as the page is in view.
     // Disable the ping by setting to 0
     specificationPingInterval: 0,
     // (Optional) Enter custom redirect URLs for login/logout and Project/DriveApp close/cancel
-    folder: "Corporate/TPM",
+    // folder: "PurAqua",
     login: {
         redirectUrl: "projects.html",
     },
@@ -24,13 +25,9 @@ const config = {
         redirectOnClose: "details.html",
         redirectOnCancel: "projects.html",
     },
-    driveApp: {
-        redirectOnClose: "details.html",
-        redirectOnCancel: "drive-apps.html",
-    },
     // (Optional) Configure 'Run' view
     run: {
-        showWarningOnExit: false, // Toggle warning dialog when exiting "Run" view with potentially unsaved changes (where supported)
+        showWarningOnExit: true, // Toggle warning dialog when exiting "Run" view with potentially unsaved changes (where supported)
         loadCustomProjectAssets: {
             scripts: false,
             styles: false,
@@ -45,7 +42,8 @@ const config = {
     // Enter a default Group Alias and/or Project name to be used (when none are passed in the query string)
     // Choose how sessions are handled
     query: {
-        defaultGroupAlias: "",
+        // defaultGroupAlias: "PurAquaDev",
+        defaultGroupAlias: "AC query",
         defaultProjectName: "",
         autoLogin: false,
         requireNewSession: true,
@@ -63,17 +61,15 @@ const config = {
     },
     // Whether to show debugging information in the console
     debug: false,
-    allowSingleSignOn: true,
+    allowSingleSignOn: false,
     accountManagement: {
-        allowForgotPassword: true,
-        allowChangePassword: true,
-        allowCreateAccount: true,
+        allowForgotPassword: false,
+        allowChangePassword: false,
+        allowCreateAccount: false,
     },
     logo: {
-        // login: "dist/img/logo-dark.svg",
-        login: "dist/img/tpm_logo_color.png",
-        // sidebar: "dist/img/logo-light.svg",
-        sidebar: "dist/img/tpm_logo_white.png",
+        login: "dist/img/PuraquaLogo_1_1.png",
+        sidebar: "dist/img/PuraquaLogo_1_1.png",
     },
 
 };

@@ -537,7 +537,7 @@ function displayErrorMessage(message, clearSession = false) {
 
     // Update template
     document.querySelector("[data-loading-state]").classList.add("hidden");
-    document.title = "Query Error | DriveWorks";
+    document.title = "Query Error | PurAqua";
 
     if (!clearSession) return;
     clearSessionData();

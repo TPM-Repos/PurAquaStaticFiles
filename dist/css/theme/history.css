@@ -47,11 +47,11 @@ button {
   display: inline-flex;
   align-items: center;
   text-align: left;
-  background-color: rgba(0,0,0,.15);
-  color: var(--accent-dark);
+  /* background-color: rgba(0,0,0,.15); */
+  /* color: var(--accent-dark); */
   padding: .5em 1em;
   margin: .5em .5em 0 0;
-  border-radius: 100em;
+  /* border-radius: 100em; */
   font-weight: 600;
   white-space: nowrap;
   transition:
@@ -158,20 +158,25 @@ button {
 /* Headings */
 .history-headings {
   display: none;
-  width: 100%;
   font-weight: 600;
-  margin-top: .5em;
-  margin-bottom: 1em;
+  width: 100%;
+  /* margin-bottom: 1em; */
   text-transform: uppercase;
 }
 .history-headings .inner {
+  background-color: var(--accent-dark);
+  color: white;
+  max-width: var(--row-width);
   display: flex;
+  padding-left: 1em;
   padding-right: 4em;
+  padding-bottom: 1em;
+  padding-top: .5em;
 }
 .history-headings .inner > * {
   width: 20%;
   padding: 0 .5em;
-  opacity: .75;
+  /* opacity: .75; */
   white-space: nowrap;
 }
 .history-headings .inner > *:first-child {
@@ -415,7 +420,7 @@ button {
   justify-content: center;
   padding: 1em;
   background-color: #ddd;
-  border-radius: 1em;
+  border-radius: var(--global-radius);
   font-size: 1.5em;
   font-weight: 600;
   min-height: 10em;
@@ -517,7 +522,7 @@ button {
     position: sticky;
     top: -1px;
     z-index: 10;
-    backdrop-filter: blur(5px);
+    /* backdrop-filter: blur(5px); */
   }
   .history-controls.is-stuck {
     box-shadow: var(--shadow-light);
