@@ -1,15 +1,12 @@
-// COPY THIS FILE TO 'configUser.js' AND UPDATE THE VALUES TO MATCH YOUR SERVER URL & GROUP ALIAS
-// Version 1.3.0
-
 const config = {
-version: "1.3.0",
+	version: "1.3.0",
 	// the full path the site running the DriveWorks Live API
 	// serverUrl: "https://dw21.api.yourdomain.com",
-	serverUrl: "",
+	serverUrl: "https://dw22.api.tpmautomation.com",
 	// The default alias for the DriveWorks Group
 	// This is a custom string that must match the name in the ConfigUser.xml file
-	groupAlias: "",
-	guestAlias: "",
+	groupAlias: "PurAquaDEV",
+	guestAlias: "PurAquaDEVGuest",
 	// (Optional) Configure ping & update intervals - in seconds
     // (Optional) Set Specification ping interval - in seconds
     // A Specification will timeout after a configured period of inactivity (see DriveWorksConfigUser.xml).
@@ -17,13 +14,12 @@ version: "1.3.0",
     // Disable the ping by setting to 0
     specificationPingInterval: 30,
 	// (Optional) Enter custom redirect URLs for login/logout and Project/DriveApp close/cancel
-	folder: "",
 	login: {
 		redirectUrl: "projects.html",
 		// set this if you want to redirect guest users to a different page
 		redirectGuestUrl: "projects.html",
 		// Set this to left, center, or right to position the login form on the page
-		columnLocation: "right",
+		columnLocation: "left",
 	},
 	logout: {
 		redirectUrl: "index.html",
@@ -63,12 +59,12 @@ version: "1.3.0",
 		defaultGroupAlias: "",
 		defaultProjectName: "",
 		autoLogin: false,
-		requireNewSession: true,
-		requireExactAlias: false,
+		requireNewSession: false,
+		requireExactAlias: true,
 	},
 	copyright: {
 		show: true,
-		holder: "TPM",
+		holder: "WestLake Corporation",
 		year: "2024",
 	},
 	// Add a watermark over pages in order to indicate that the site is a development site
@@ -76,11 +72,10 @@ version: "1.3.0",
 	watermark: "Development",
 	// Set the title of the site, this will be displayed in the browser tab
 	// pageName | siteName
-	siteName: "TPM",
+	siteName: "WestLake Corporation",
 	// Set whether a username or email address will be used
 	// username | email address
-	usernameType: "Username",
-    passwordRequired: false,
+	usernameType: "username",
 	loginReturnUrls: true, // Toggle appending return urls to restore the previous location when redirected to the login form
 	locale: "en-US", // Set the default locale for displaying dates and numbers
 	dateFormat: {
@@ -95,21 +90,18 @@ version: "1.3.0",
 	debug: false,
 	allowSingleSignOn: false,
 	disableRegularLogin: false,
-	guestLogin: true,
-	// In order to use the Account Management features you will need a project in your DriveWorks Group
-	// You will also need to allow all users (and Guest) to run the Macro called Navigate
-	// CreateAccount and ForgotPassword require the macro to be enabled in the Guest Alias
+	guestLogin: false,
 	accountManagement: {
-		// uses guestAlias, but can be set to a different alias by uncommenting the following line
-		// guestAlias: "Guest",
-		projectName: "AccountManagement",
-		// these three options can be true, false, or a string
-			// if a string is provided it will be the entire URL for example: "query?alias=development&run=AccountManagement&DWMacroNavigate=ResetPassword"
-			// only set the string if you are not using the TPM Account Management project
-		createAccount: true,
-		forgotPassword: true,
-		resetPassword: true,
-	},
+        // uses guestAlias, but can be set to a different alias by uncommenting the following line
+        // guestAlias: "Guest",
+        projectName: "AccountManagement",
+        // these three options can be true, false, or a string
+            // if a string is provided it will be the entire URL for example: "query?alias=development&run=AccountManagement&DWMacroNavigate=ResetPassword"
+            // only set the string if you are not using the TPM Account Management project
+        createAccount: true,
+        forgotPassword: true,
+        resetPassword: true,
+    },
 	sidebarLinks: [
 		{
 			title: "Projects",
@@ -133,8 +125,8 @@ version: "1.3.0",
 		// Here is an example with svgs and with pngs
 		// login: "dist/img/logo-dark.svg",
 		// sidebar: "dist/img/logo-light.svg",
-		login: "dist/img/tpm_logo_color.png",
-		sidebar: "dist/img/tpm_logo_white.png",
+		login: "dist/img/logo.png",
+		sidebar: "dist/img/logo.png",
 		// By default the login screen will show a static cover image
 		// You can change it to a different image here.
 		loginCover: "dist/img/login-cover.png",
@@ -143,12 +135,17 @@ version: "1.3.0",
 		// You may use as many as you want but the more you use the longer the page will take to load
 		carousel: {
 			enabled: true,
-			interval: 7.5,
+			interval: 5,
 			images: [
-				"dist/img/carousel-1.jpg",
-				"dist/img/carousel-2.jpg",
-				"dist/img/carousel-3.jpg",
-				"dist/img/carousel-4.jpg",
+				"dist/img/slide1.webp",
+				"dist/img/slide2.webp",
+				"dist/img/slide3.webp",
+				"dist/img/slide4.webp",
+				"dist/img/slide5.webp",
+				"dist/img/slide6.webp",
+				"dist/img/slide7.webp",
+				"dist/img/slide8.webp",
+				"dist/img/slide10.webp",
 			],
 		},
 	},
@@ -161,17 +158,17 @@ version: "1.3.0",
 	// line height can be px, pt, or unit-less. unit-less is * font size
 	styles: {
         text: {
-            font: "Poppins",
-            size: "12pt",
+            font: "Roboto",
+            size: "14px",
             color: "black",
-            lineHeight: "1.8",
+            lineHeight: "20px",
         },
         heading: {
-            font: "Inter",
-            size: "48pt",
-            color: "black",
-            weight: "bold",
-            lineHeight: "1.2",
+            font: "RobotoSlab-Regular, Roboto, sans-serif",
+            size: "36px",
+            color: "#3b5795",
+            weight: "500",
+            lineHeight: "40px",
         },
         caption: {
             font: "Roboto",
@@ -181,16 +178,16 @@ version: "1.3.0",
         },
         color: {
             primary: "#000000",
-            secondary: "#00AEEF",
-            background: "white",
-            icon: "#00AEEF",
+            secondary: "#3b5795",
+            background: "#edeeee",
+            icon: "black",
             focus: "#00AEEF",
         },
         sidebar: {
-            background: "#292929",
+            background: "white",
             width: "18em",
             logoPadding: "1em",
-			textColor: "white",
+			textColor: "black",
         },
         loginForm: {
             background: "white",
@@ -210,11 +207,11 @@ version: "1.3.0",
             width: "50%"
         },
         projectCard: {
-            background: "#efeeed",
-            margin: "22px",
+            background: "white",
+            margin: "10px",
         },
 		// not recommended to use %
-        inputRadius: "10pt",
+        inputRadius: "0",
     },
 }
 
