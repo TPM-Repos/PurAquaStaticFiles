@@ -1,3 +1,4 @@
+/* Version 1.3.0 */
 /**
 * DETAILS
 */
@@ -18,7 +19,7 @@ button,
 	display: inline-flex;
 	justify-content: center;
 	padding: 1em 2em;
-	border-radius: 100em;
+	border-radius: var(--button-radius, 100em);
 	border: none;
 	background-color: var(--color-neutral);
 	color: #fff;
@@ -147,7 +148,7 @@ button.action-transition {
 .summary-content {
 	background-color: #fff;
 	padding: 0.5em 1.5em;
-	border-radius: var(--global-radius);
+	border-radius: var(--inputRadius);
 	box-shadow: var(--shadow-light);
 }
 
@@ -186,7 +187,7 @@ button.action-transition {
 .detail-properties .properties-content {
 	background-color: #fff;
 	padding: 0.5em 1.5em;
-	border-radius: var(--global-radius);
+	border-radius: var(--inputRadius);
 	box-shadow: var(--shadow-light);
 	overflow: auto;
 }
@@ -322,7 +323,7 @@ button.action-transition {
 	display: flex;
 	align-items: center;
 	background-color: #fff;
-	border-radius: var(--global-radius);
+	border-radius: var(--inputRadius);
 	box-shadow: var(--shadow-light);
 	margin-bottom: 0.5em;
 	transition: transform 0.2s ease;
@@ -331,7 +332,7 @@ button.action-transition {
 	display: block;
 	width: 100%;
 	padding: 1em;
-	color: var(--accent-dark);
+	color: var(--color-primary);
 	text-decoration: none;
 	text-align: left;
 }
@@ -430,7 +431,7 @@ button.action-transition {
 	align-self: stretch;
 	font-size: 1.25em;
 	padding: 1em;
-	color: var(--accent-dark);
+	color: var(--color-primary);
 	opacity: 0.75;
 	transition: color 0.25s ease, opacity 0.25s ease;
 }
