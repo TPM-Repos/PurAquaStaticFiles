@@ -1,15 +1,25 @@
 <!DOCTYPE html>
+<!-- Version 1.3.0 -->
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
 
-		<title>Run | PurAqua</title>
+		<title>Run</title>
+
+		<!-- Scripts -->
+		<script src="dist/js/loadClient.js?v=2024-11-10-1" defer></script>
+		<script src="configUser.js?v=2024-11-10-1" defer onload="loadClient()"></script>
+		<script src="dist/js/sidebar.js?v=2024-11-10-1" defer></script>
+		<script src="dist/js/run.js?v=2024-12-04-1" defer></script>
+		<script src="dist/js/ui.js?v=2024-11-10-1" defer></script>
+		<script src="dist/js/core.js?v=2024-11-10-1" defer></script>
 
 		<!-- Core Styles -->
 		<link rel="stylesheet" type="text/css" href="dist/css/reset.css" />
 		<link rel="stylesheet" type="text/css" href="dist/css/core.css" />
+		<link rel="stylesheet" type="text/css" href="dist/css/TailWind.css" />
 
 		<!-- Theme Styles (customizable) -->
 		<link
@@ -34,8 +44,41 @@
 		/>
 	</head>
 
-	<body class="template-run">
-		<main class="content-wrap">
+	<body
+		class="template-run text-brand-primary flex flex-col w-full h-screen vsc-initialized"
+	>
+		<header
+			class="relative z-10 flex items-center w-full h-16 bg-white px-2 shadow-md"
+		>
+			<div class="row mx-auto flex items-center">
+				<div class="flex flex-1 overflow-hidden">
+					<svg class="w-6 h-6 ml-3 sm:ml-8 mr-2 shrink-0">
+						<use xlink:href="dist/icons.svg#user"></use>
+					</svg>
+					<span data-username="" class="truncate username is-shown" id="active-username"
+						>Customer</span
+					>
+				</div>
+
+				<div class="mx-3">
+					<img id="logo" />
+				</div>
+
+				<div class="flex flex-1 justify-end">
+					<a href="?bye"
+						data-logout=""
+						class="flex pl-2 pr-3 py-2 border-2 border-transparent hover:border-2 hover:border-gray-300 transition-colors whitespace-nowrap"
+					>
+					<svg class="w-6 h-6 mr-2">
+						<use xlink:href="dist/icons.svg#logout"></use>	
+					</svg>
+						Log out
+					</a>
+				</div>
+			</div>
+		</header>
+
+		<main class="content-wrap styled-loading flex-1">
 			<aside
 				id="content-navigation"
 				class="content-nav"
@@ -92,7 +135,7 @@
 							<button
 								type="button"
 								id="logout-nav"
-								class="logout-button"
+								class="logout-button button"
 							>
 								Log out
 							</button>
@@ -107,11 +150,11 @@
 						</svg>
 						<span class="username"></span>
 					</div>
-
+					<a id="reset-password">Reset Password</a>
 					<button
 						type="button"
 						id="logout-button"
-						class="logout-button"
+						class="logout-button button"
 					>
 						Log out
 					</button>
@@ -143,25 +186,5 @@
 				Close Menu
 			</button>
 		</main>
-
-		<!-- Scripts -->
-		<script src="config.js"></script>
-		<script src="dist/js/core.js"></script>
-		<script src="dist/js/run.js"></script>
-
-		<!-- Option A) Directly load Client Library -->
-		<!-- <script src="https://YOUR-DRIVEWORKS-LIVE-SERVER-URL.COM/DriveworksLiveIntegrationClient.min.js" onload="dwClientLoaded()" onerror="dwClientLoadError()"></script> -->
-
-		<!-- Option B) Inject Client Library dynamically from server url in config file -->
-		<script>
-			;(function (doc, script) {
-				script = doc.createElement("script")
-				script.src =
-					config.serverUrl + "/DriveWorksLiveIntegrationClient.min.js"
-				script.onerror = () => dwClientLoadError()
-				script.onload = () => dwClientLoaded() // Custom local function run when client has loaded
-				doc.body.appendChild(script)
-			})(document)
-		</script>
 	</body>
 </html>

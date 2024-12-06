@@ -1,23 +1,27 @@
+// Version 1.3.0
 /**
  * SPECIFICATION HISTORY
  */
 
-const defaultLimit = 10
-const defaultDateOrder = "desc"
+const defaultLimit = config.history.specLimitOnPage ?? 10
+const defaultDateOrder = config.history.dateOrder ?? "desc"
+const defaultRunningSpecVisibility = config.history.showRunningSpecs ?? false
 let renderedProperties = []
 
 const storageKeyName = "historyFilterName"
 const storageKeyDateOrder = "historyDateOrder"
+const storageKeyRunningSpecVisibility = "historyRunningSpecVisibility"
 const storageKeyPosition = "historyPosition"
 
 const historyList = document.getElementById("history-content")
 const nameFilterInput = document.getElementById("name-filter-input")
 const dateOrderToggle = document.getElementById("date-order-toggle")
+const runningSpecToggle = document.getElementById("running-spec-toggle")
 const expandToggle = document.getElementById("expand-toggle")
 const resetButton = document.getElementById("filter-reset-button")
 
-let filterDateOrder =
-	localStorage.getItem(storageKeyDateOrder) ?? defaultDateOrder
+let filterDateOrder = 	localStorage.getItem(storageKeyDateOrder) ?? defaultDateOrder
+let runningSpecVisibility = localStorage.getItem(storageKeyRunningSpecVisibility) ?? defaultRunningSpecVisibility
 let isLoadingHistory = false
 let blockLazyLoading = false
 let expandedView = false
@@ -83,8 +87,10 @@ function getStoredQuery(top, skip) {
 	// Get date order
 	query += `&$orderby=DateEdited ${filterDateOrder}`
 
-	// Filter out running Specifications (shouldn't be shown/accessible)
-	query += "&$filter=StateType ne 'Running'"
+	// Filter out running Specifications
+	if (!runningSpecVisibility) {
+		query += "&$filter=StateType ne 'Running'"
+	}
 
 	// Get name filter
 	const filterName = localStorage.getItem(storageKeyName)
@@ -383,6 +389,25 @@ dateOrderToggle.onclick = () => {
 	localStorage.setItem(storageKeyDateOrder, filterDateOrder)
 }
 
+runningSpecToggle.onclick = () => {
+	// Show loading state
+	document.body.classList.add("is-loading")
+	window.scroll(0, 0)
+
+	// Toggle visibility
+	runningSpecVisibility = !runningSpecVisibility
+	setRunningSpecToggleState(runningSpecVisibility)
+
+	// Reset stage
+	resetFilterPosition()
+
+	// Re-render
+	getSpecificationsWithQuery(getStoredQuery(), true)
+
+	// Stored new visibility state
+	localStorage.setItem(storageKeyRunningSpecVisibility, runningSpecVisibility)
+}
+
 /**
  * Set date order toggle state.
  *
@@ -396,6 +421,21 @@ function setDateOrderToggleState(order) {
 	dateOrderToggle.classList.add(`order-${order}`)
 	dateOrderToggle.querySelector("span").innerHTML =
 		order == "desc" ? "Newest First" : "Oldest First"
+}
+
+/**
+ * Set running spec toggle state.
+ *
+ * @param {boolean} visibility - Toggle state
+ */
+function setRunningSpecToggleState(visibility) {
+	// Set the innerText based on visibility
+	runningSpecToggle.querySelector("span").innerHTML = (visibility ? "Hide" : "Show") + " Running Specifications"
+
+	// switch the icon between eye-open and eye-closed
+	runningSpecToggle.querySelector(".icon.eye").innerHTML = visibility ?
+		`<use xlink:href="dist/icons.svg#eye-open" />` :
+		`<use xlink:href="dist/icons.svg#eye-closed" />`
 }
 
 /**
@@ -614,3 +654,4 @@ const headerObserver = new IntersectionObserver(
 	{threshold: [1]},
 )
 headerObserver.observe(pageHeader)
+

@@ -1,3 +1,4 @@
+// Version 1.3.0
 /**
  * SHARED CORE PAGE FUNCTIONS
  */
@@ -6,23 +7,31 @@ const SERVER_URL = config.serverUrl
 const GROUP_ALIAS = localStorage.getItem("sessionAlias")
 const CURRENT_SESSION = localStorage.getItem("sessionId")
 
+// Account Management
+const AM_GUEST_ALIAS = config.accountManagement?.guestAlias || config.guestAlias
+const AM_PROJECT_NAME = config.accountManagement?.projectName || "AccountManagement"
+const AM_QUERY_STRING = `query?alias=${AM_GUEST_ALIAS}&run=${AM_PROJECT_NAME}&DWMacroNavigate=`
+const CREATE_ACCOUNT_URL = AM_QUERY_STRING + (typeof config.accountManagement?.createAccount === 'string' ? config.accountManagement.createAccount : "CreateAccount");
+const FORGOT_PASSWORD_URL = AM_QUERY_STRING + (typeof config.accountManagement?.forgotPassword === 'string' ? config.accountManagement.forgotPassword : "ForgotPassword");
+const RESET_PASSWORD_URL = `run.html?project=${AM_PROJECT_NAME}&DWMacroNavigate=` + (typeof config.accountManagement?.resetPassword === 'string' ? config.accountManagement.resetPassword : "ResetPassword");
+
+
 // Elements
-const passwordReset = document.getElementById("password-reset")
+const passwordResetLink = document.getElementById("reset-password")
 
 let client
 
-/**
- * Run on page load.
- */
+	/**
+	 * Run on page load.
+	 */
 ;(() => {
 	// Check if Session Id exists
 	checkStoredSessionId()
-	setLogo()
 	showUsername()
 	attachLogoutActions()
 	detectTouchDevice()
 	handleMobileNavigationToggle()
-	hidePasswordReset()
+	passwordReset()
 })()
 
 /**
@@ -246,7 +255,26 @@ function showUsername() {
 
 	usernameOutput.classList.add("is-shown")
 	document.querySelector("#active-username .username").innerHTML = username
+
+	adjustFontSize()
 }
+
+function adjustFontSize() {
+    const element = document.querySelector('.username');
+    let fontSize = 20;
+    element.style.fontSize = fontSize + 'px';
+
+    while (element.scrollWidth > element.clientWidth && fontSize > 10) {
+		consoleDebug(fontSize);
+		
+        fontSize -= 1;
+        element.style.fontSize = fontSize + 'px';
+    }
+}
+
+// run adjustFontSize() on load or zoom
+window.addEventListener('load', adjustFontSize);
+window.addEventListener('resize', adjustFontSize);
 
 /**
  * Detect touch devices - alter UI accordingly.
@@ -298,10 +326,10 @@ function ensureDateTimeUTC(dateTime) {
         2024-03-08T00:19:33.517-05:00
         The time is UTC, but the timezone is that of the server, so the time is incorrect.
         Our goal is to strip the timezone offset (-05:00) from the end of the string and replace it with Z
-        Z is the denotation for Zulu, meaning UTC+0, or Greenich mean time
+        Z is the denotation for Zulu, meaning UTC+0, or Greenwich mean time
         the end of the string will have a timezone in it with either a + or -
         For example
-            2024-03-08T00:19:33.517-05:00 or 2024-03-08T00:19:33.517+12:30 
+            2024-03-08T00:19:33.517-05:00 or 2024-03-08T00:19:33.517+12:30
         So we are going to identify the position of this, then replace it with Z
     */
 	const regex = /[-+]\d{2}:\d{2}$/ // Match timezone offset pattern like "-05:00"
@@ -323,7 +351,7 @@ const dateTimeFormat = new Intl.DateTimeFormat(config.locale, config.dateFormat)
 
 /**
  * Convert DateTime string to localized string
- * This uses the options in config.js
+ * This uses the options in configUser.js
  * @param {string} dateTime
  * @return {string}
  */
@@ -359,23 +387,29 @@ function consoleDebug(...args) {
  * hide the password reset link if the feature is disabled
  * @return {void}
  */
-function hidePasswordReset() {
-	if (!passwordReset) {
+function passwordReset() {
+	if (!passwordResetLink) {
 		return
 	}
-	if (!config.accountManagement.allowChangePassword) {
-		passwordReset.style.display = "none"
+	if (!config.accountManagement || !config.accountManagement.resetPassword || isGuest()) {
+		// don't show the link if the config option is disabled or unset
+		// or if the user is a guest
+		passwordResetLink.style.display = "none"
+	} else {
+		passwordResetLink.href = RESET_PASSWORD_URL
 	}
 }
 
 /**
- * Set the logo
+ * Is user Guest?
+ * @return {boolean}
  */
-function setLogo() {
-	const logo = document.getElementById("logo")
-
-	if (logo && config.logo.sidebar) {
-		logo.src = config.logo.sidebar
-		return
-	}
+function isGuest() {
+	const username = localStorage.getItem("sessionUsername")
+	const sessionAlias = localStorage.getItem("sessionAlias")
+	return (
+		username === "Guest" ||
+		sessionAlias === config.guestAlias
+	)
 }
+

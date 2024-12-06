@@ -1,3 +1,4 @@
+// Version 1.3.0
 /**
  * PROJECTS
  */
@@ -71,7 +72,7 @@ function renderProjects(projects) {
 					description &&
 					'<div class="project-description">' + description + "</div>"
 				}
-                <div class="project-action">Create</div>
+                <div class="project-action button">Create</div>
             </div>
         `
 

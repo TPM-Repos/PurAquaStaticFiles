@@ -1,11 +1,20 @@
 <!DOCTYPE html>
+<!-- Version 1.3.0 -->
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
 
-		<title>Projects | PurAqua</title>
+		<title>Projects</title>
+
+		<!-- Scripts -->
+		<script src="dist/js/loadClient.js?v=2024-11-10-1" defer></script>
+		<script src="configUser.js?v=2024-11-10-1" defer onload="loadClient()"></script>
+		<script src="dist/js/sidebar.js?v=2024-11-10-1" defer></script>
+		<script src="dist/js/ui.js?v=2024-11-10-1" defer></script>
+		<script src="dist/js/core.js?v=2024-11-10-1" defer></script>
+		<script src="dist/js/projects.js?v=2024-11-10-1" defer></script>
 
 		<!-- Core Styles -->
 		<link rel="stylesheet" type="text/css" href="dist/css/core.css" />
@@ -22,14 +31,14 @@
 			href="dist/css/theme/projects.css"
 		/>
 
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="dist/css/theme/fonts.css"
+		/>
+
 		<!-- Favicon -->
 		<link rel="icon" href="favicon.ico" />
-
-		<!-- Custom Font -->
-		<link
-			href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap"
-			rel="stylesheet"
-		/>
 	</head>
 
 	<body class="template-projects has-navigation">
@@ -50,46 +59,11 @@
 
 				<nav id="nav-list">
 					<ul>
-						<li>
-							<a href="projects.html" class="is-current">
-								<svg class="icon">
-									<use xlink:href="dist/icons.svg#projects" />
-								</svg>
-								Projects
-							</a>
-						</li>
-						<!--<li>
-                        <a href="drive-apps.html">
-                            <svg class="icon">
-                                <use xlink:href="dist/icons.svg#drive-apps" />
-                            </svg>
-                            DriveApps
-                        </a>
-                    </li>-->
-						<li>
-							<a href="history.html">
-								<svg class="icon">
-									<use xlink:href="dist/icons.svg#history" />
-								</svg>
-								History
-							</a>
-						</li>
-						<li>
-							<a
-								id="password-reset"
-								href="query?DWConstantForm=PasswordReset"
-							>
-								<svg class="icon">
-									<use xlink:href="dist/icons.svg#reset" />
-								</svg>
-								Reset Password
-							</a>
-						</li>
 						<li class="logout-list">
 							<button
 								type="button"
 								id="logout-nav"
-								class="logout-button"
+								class="logout-button button"
 							>
 								Log out
 							</button>
@@ -104,11 +78,11 @@
 						</svg>
 						<span class="username"></span>
 					</div>
-
+					<a id="reset-password">Reset Password</a>
 					<button
 						type="button"
 						id="logout-button"
-						class="logout-button"
+						class="logout-button button"
 					>
 						Log out
 					</button>
@@ -151,25 +125,6 @@
 				Close Menu
 			</button>
 		</main>
-
-		<!-- Scripts -->
-		<script src="config.js"></script>
-		<script src="dist/js/core.js"></script>
-		<script src="dist/js/projects.js"></script>
-
-		<!-- Option A) Directly load Client Library -->
-		<!-- <script src="https://YOUR-DRIVEWORKS-LIVE-SERVER-URL.COM/DriveworksLiveIntegrationClient.min.js" onload="dwClientLoaded()" onerror="dwClientLoadError()"></script> -->
-
-		<!-- Option B) Inject Client Library dynamically from server url in config file -->
-		<script>
-			;(function (doc, script) {
-				script = doc.createElement("script")
-				script.src =
-					config.serverUrl + "/DriveWorksLiveIntegrationClient.min.js"
-				script.onerror = () => dwClientLoadError()
-				script.onload = () => dwClientLoaded() // Custom local function run when client has loaded
-				doc.body.appendChild(script)
-			})(document)
-		</script>
 	</body>
 </html>
+

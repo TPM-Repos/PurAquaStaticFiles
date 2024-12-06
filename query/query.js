@@ -1,3 +1,4 @@
+// Version 1.3.0
 /**
  * Query Function (/query?...)
  * ---------------------------
@@ -56,9 +57,9 @@
  */
 
 // Enable console output to assist debugging
-const DEBUG_MODE = false
+const DEBUG_MODE = config.debug
 
-// Load settings from config file (config.js)
+// Load settings from config file (configUser.js)
 const REQUIRE_NEW_SESSION = config.query.requireNewSession
 const REQUIRE_EXACT_ALIAS = config.query.requireExactAlias
 const SERVER_URL = config.serverUrl
@@ -124,7 +125,7 @@ class SessionManager {
 			urlQuery.get("user") ||
 			urlQuery.get("User")
 		if (queryAlias) {
-			groupAlias = queryAlias // Override the default Group Alias (if set in config.js)
+			groupAlias = queryAlias // Override the default Group Alias (if set in configUser.js)
 			autoLogin = true // If a Group Alias is specified, it should be treated as an automatic login.
 		}
 
@@ -205,15 +206,15 @@ class SessionManager {
 	}
 
 	/**
-	 * Logout of all Groups and start a fresh Session.
+	 * Logout of all Groups (if pre-existing, valid session), start a new Session.
 	 */
 	async restartSession() {
 		try {
 			await client.logoutAllGroups()
-			await this.startSession()
 		} catch (error) {
 			debug(error, true)
 		}
+		await this.startSession()
 	}
 
 	/**
@@ -584,7 +585,7 @@ function displayErrorMessage(message, clearSession = false) {
 
 	// Update template
 	document.querySelector("[data-loading-state]").classList.add("hidden")
-	document.title = "Query Error | PurAqua"
+	document.title = "Query Error | DriveWorks"
 
 	if (!clearSession) return
 	clearSessionData()
@@ -608,3 +609,4 @@ function debug(message, forceLog = false) {
 		console.log(message)
 	}
 }
+

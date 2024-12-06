@@ -1,3 +1,4 @@
+// Version 1.3.0
 /**
  * RUNNING SPECIFICATION
  */
@@ -60,6 +61,15 @@ if (QUERY_DRIVE_APP_ALIAS) {
  * Start page functions.
  */
 function startPageFunctions() {
+	// Set username in header
+	showHeaderUsername()
+
+	// Don't Allow Guest's to change the password
+	if (isGuest() && isResetPassword()) {
+		renderError("As a Guest you don't have access to this page", "error")
+		return
+	}
+
 	setCustomClientErrorHandler()
 
 	// Show confirmation dialog before logout
@@ -117,7 +127,7 @@ function renderError(message, error = null) {
 
 	// Redirect to configured cancel location
 	setTimeout(() => {
-		window.location.href = currentConfig.redirectOnCancel
+		redirectOnSpecAction("cancel")
 	}, 2000)
 }
 
@@ -212,7 +222,10 @@ async function renderNewSpecification(
 	specification.registerSpecificationCancelledDelegate(() => formCancelled())
 
 	// Start ping (keep Specification alive)
-	pingSpecification(specification)
+	specification.enableAutoPing(SPECIFICATION_PING_INTERVAL)
+
+	// attach logout to particular buttons
+	attachLogoutButtons()
 
 	// [OPTIONAL] Show Specification Name in browser tab title
 	if (showSpecificationNameInTitle) {
@@ -284,7 +297,10 @@ async function renderExistingSpecification() {
 		)
 
 		// Start ping (keep Specification alive)
-		pingSpecification(specification)
+		specification.enableAutoPing(SPECIFICATION_PING_INTERVAL)
+
+		// attach logout to particular buttons
+		attachLogoutButtons()
 
 		// [OPTIONAL] Show Specification Name in browser tab title
 		setTabTitleSpecificationName(specification)
@@ -293,35 +309,6 @@ async function renderExistingSpecification() {
 		loadCustomProjectAssets()
 	} catch (error) {
 		renderError(existingError, error)
-	}
-}
-
-/**
- * Ping the running Specification.
- *
- * A Specification will timeout after a configured period of inactivity (see DriveWorksConfigUser.xml).
- * This function prevents a Specification timing out as long as the page is in view.
- *
- * @param {Object} specification - The Specification object.
- */
-function pingSpecification(specification) {
-	// Disable ping if interval is 0
-	if (SPECIFICATION_PING_INTERVAL === 0) {
-		return
-	}
-
-	try {
-		// Ping Specification to reset timeout
-		specification.ping()
-
-		// Schedule next ping
-		setTimeout(
-			pingSpecification,
-			SPECIFICATION_PING_INTERVAL * 1000,
-			specification,
-		)
-	} catch (error) {
-		handleGenericError(error)
 	}
 }
 
@@ -449,7 +436,7 @@ function attachSpecificationEvents(formElement) {
 	formElement.addEventListener("ActionsUpdated", async () => {
 		disableSpecificationActions()
 
-		// Ensure we have the latest Specification Id
+		// Ensure we have the latest Specification Id, as ActionsUpdated can fire before/separately to FormUpdated.
 		const formData = await client.getSpecificationFormData(
 			GROUP_ALIAS,
 			rootSpecificationId,
@@ -506,34 +493,30 @@ function registerFormButtons(specification) {
  * Render Specification Actions (Operations & Transitions).
  */
 async function renderSpecificationActions() {
-	// Get all Actions
+	// Get enabled Actions
 	const actions = await client.getSpecificationActions(
 		GROUP_ALIAS,
 		activeSpecificationId,
 	)
 
-	// Output Actions if: not stored (first run), objects don't match
-	if (!isEmpty(actions)) {
-		// Clear out old Actions
-		SPECIFICATION_ACTIONS.innerHTML = ""
+	// Clear out old Actions
+	SPECIFICATION_ACTIONS.innerHTML = ""
 
-		for (let actionIndex = 0; actionIndex < actions.length; actionIndex++) {
-			const action = actions[actionIndex]
-			const name = action.name
-			const title = action.title
-			const type = action.type
+	for (const action of actions) {
+		const name = action.name
+		const title = action.title
+		const type = action.type
 
-			// Create button
-			const button = document.createElement("button")
-			button.classList.add("action-button")
-			button.innerHTML = title
+		// Create button
+		const button = document.createElement("button")
+		button.classList.add("action-button")
+		button.innerHTML = title
 
-			// Check type
-			if (type === "Operation") {
-				renderOperationAction(name, button)
-			} else {
-				renderTransitionAction(name, button)
-			}
+		// Check type
+		if (type === "Operation") {
+			renderOperationAction(name, button)
+		} else {
+			renderTransitionAction(name, button)
 		}
 	}
 
@@ -707,7 +690,7 @@ async function invokeTransition(transitionName) {
 		if (redirectAfterTransition) {
 			detachPageUnloadDialog()
 
-			window.location.href = `${currentConfig.redirectOnClose}?specification=${rootSpecificationId}`
+			redirectOnSpecAction("close")
 		}
 	} catch (error) {
 		handleGenericError(error)
@@ -745,7 +728,7 @@ function formUpdated(event) {
 function formClosed() {
 	detachPageUnloadDialog()
 
-	window.location.href = `${currentConfig.redirectOnClose}?specification=${rootSpecificationId}`
+	redirectOnSpecAction("close")
 }
 
 /**
@@ -754,7 +737,7 @@ function formClosed() {
 function formCancelled() {
 	detachPageUnloadDialog()
 
-	window.location.href = currentConfig.redirectOnCancel
+	redirectOnSpecAction("cancel")
 }
 
 /**
@@ -763,14 +746,46 @@ function formCancelled() {
 function existingSpecificationClosed() {
 	detachPageUnloadDialog()
 
-	window.location.href = `${currentConfig.redirectOnClose}?specification=${rootSpecificationId}`
+	redirectOnSpecAction("close")
 }
 
 /**
  * Existing Specification cancelled.
  */
 function existingSpecificationCancelled() {
-	window.location.href = `${currentConfig.redirectOnClose}?specification=${rootSpecificationId}`
+	redirectOnSpecAction("close")
+}
+
+/**
+ * Redirect On Close
+ * If Guest, redirect to logout
+ * If ResetPassword, redirect to login
+ * If close, redirect to config.redirectOnClose
+ * If cancel, redirect to config.redirectOnCancel
+ */
+function redirectOnSpecAction(action = "close") {
+	if (
+		isGuest() || isResetPassword()
+	) {
+		page = "logout"
+	} else if (action === "close") {
+		page = currentConfig.redirectOnClose
+	} else if (action === "cancel") {
+		page = currentConfig.redirectOnCancel
+	}
+	if (page === "logout") {
+		handleLogout()
+	} else {
+		window.location.href = `${page}?specification=${rootSpecificationId}`
+	}
+}
+
+/**
+ * Is the current page "Reset Password"?
+ * @returns {boolean}
+ */
+function isResetPassword() {
+	return ( URL_QUERY.get("DWMacroNavigate") === "ResetPassword" )
 }
 
 /**
@@ -972,4 +987,33 @@ function showConfirmationDialog(confirmAction, message = "Are you sure?") {
 	}
 
 	document.addEventListener("keydown", dismissEscKey)
+}
+
+/**
+ * Attach logout actions to macro buttons
+ */
+function attachLogoutButtons() {
+	const form_dom = document.querySelector("dw-form").shadowRoot
+	const logoutButtons = form_dom.querySelectorAll("[data-metadata*='logout']")
+	if (!logoutButtons) {
+		console.log("no buttons found")
+		return
+	}
+
+	for (const logoutButton of logoutButtons) {
+		logoutButton.addEventListener("click", handleLogout)
+	}
+}
+
+/**
+ * Set username in header
+ */
+function showHeaderUsername() {
+	const usernameOutput = document.querySelector("header .username")
+	const username = localStorage.getItem("sessionUsername")
+	if (!username || !usernameOutput) {
+		return
+	}
+
+	usernameOutput.innerHTML = username
 }

@@ -1,12 +1,26 @@
 <!DOCTYPE html>
+<!-- Version 1.3.0 -->
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-		<title>Query processing... | PurAqua</title>
+
+		<title>Query processing...</title>
+
 		<link rel="icon" href="../favicon.ico" />
 
+		<!-- Scripts -->
+		<script src="../dist/js/loadClient.js?v=2024-11-10-1" defer></script>
+		<script src="../configUser.js?v=2024-11-10-1" defer onload="loadClient()"></script>
+		<script src="query.js?v=2024-11-10-1" defer></script>
+
+		<!-- Styles -->
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="../dist/css/theme/fonts.css"
+		/>
 		<style>
 			html,
 			body {
@@ -45,6 +59,7 @@
 				display: flex;
 				flex-direction: column;
 			}
+
 			.error-message .message {
 				display: inline-block;
 				padding: 0.75em 1em;
@@ -53,12 +68,14 @@
 				color: #fff;
 				border-radius: 0.25em;
 			}
+
 			.error-message a {
 				font-size: 0.875em;
 				padding: 1em 0;
 				color: #4299e1;
 				text-decoration: underline;
 			}
+
 			.error-message a:hover {
 				text-decoration: none;
 			}
@@ -71,6 +88,7 @@
 				0% {
 					transform: rotate(0deg);
 				}
+
 				100% {
 					transform: rotate(359deg);
 				}
@@ -86,23 +104,6 @@
 				<a href="../index.html">Back to login</a>
 			</div>
 		</div>
-
-		<!-- Scripts -->
-		<script src="../config.js"></script>
-		<script src="query.js"></script>
-
-		<!-- Option A) Directly load Client Library -->
-		<!-- <script src="https://YOUR-DRIVEWORKS-LIVE-SERVER-URL.COM/DriveworksLiveIntegrationClient.min.js" onload="dwClientLoaded()"></script> -->
-
-		<!-- Option B) Inject Client Library dynamically from server url in config file -->
-		<script>
-			;(function (doc, script) {
-				script = doc.createElement("script")
-				script.src =
-					config.serverUrl + "/DriveWorksLiveIntegrationClient.min.js"
-				script.onload = () => dwClientLoaded() // Custom local function run when client has loaded
-				doc.body.appendChild(script)
-			})(document)
-		</script>
 	</body>
 </html>
+

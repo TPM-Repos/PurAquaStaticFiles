@@ -1,11 +1,18 @@
 <!DOCTYPE html>
+<!-- Version 1.3.0 -->
 <html lang="en">
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
 
-		<title>Login | PurAqua</title>
+		<title>Login</title>
+
+		<!-- Scripts -->
+		<script src="dist/js/loadClient.js?v=2024-11-10-1" defer></script>
+		<script src="configUser.js?v=2024-11-10-1" defer onload="loadClient()"></script>
+		<script src="dist/js/login.js?v=2024-11-10-1" defer></script>
+		<script src="dist/js/ui.js?v=2024-11-10-1" defer></script>
 
 		<!-- Core Styles -->
 		<link rel="stylesheet" type="text/css" href="dist/css/core.css" />
@@ -21,15 +28,14 @@
 			type="text/css"
 			href="dist/css/theme/login.css"
 		/>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="dist/css/theme/fonts.css"
+		/>
 
 		<!-- Favicon -->
 		<link rel="icon" href="favicon.ico" />
-
-		<!-- Custom Font -->
-		<link
-			href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700&display=swap"
-			rel="stylesheet"
-		/>
 	</head>
 
 	<body class="template-login">
@@ -47,13 +53,16 @@
 				<div id="login-notice" class="login-notice"></div>
 
 				<div class="login-details">
-					<label for="login-username"> Username </label>
+					<label for="login-username" id="username-label">
+						Username
+					</label>
 					<input
 						type="text"
 						id="login-username"
 						autocomplete="username"
 						value=""
 						autofocus
+						required
 					/>
 
 					<label for="login-password"> Password </label>
@@ -77,17 +86,15 @@
 						</button>
 					</div>
 
-					<a
-						id="forgot-link"
-						href="query?DWConstantForm=ForgotPassword"
-					>
+					<a id="forgot-link" class="hidden">
 						Forgot Password?
 					</a>
 
 					<button
 						type="submit"
 						id="login-button"
-						class="login-button"
+						class="login-button button skeleton-block"
+						disabled
 					>
 						Login
 						<svg class="icon">
@@ -95,46 +102,40 @@
 						</svg>
 					</button>
 
-					<a
-						id="create-link"
-						href="query?DWConstantForm=CreateAccount"
-					>
-						Create Account
-					</a>
-
-					<div id="login-divider">or</div>
-
 					<button
 						type="button"
 						id="login-sso-button"
-						class="login-button"
+						class="login-button button skeleton-block hidden"
+						disabled
 					>
 						Login with SSO
 					</button>
+					<button
+						type="button"
+						id="login-guest-button"
+						class="login-button button hidden"
+						disabled
+					>
+						Login as Guest
+					</button>
+
+					<div class="login-divider hidden">or</div>
+
+					<button
+						type="button"
+						id="create-account-button"
+						class="login-button button pill hidden"
+						disabled
+					>
+						Create Account
+					</button>
 				</div>
 
-				<div class="login-copyright">PurAqua - 2024</div>
+				<div class="login-copyright">TPM - 2024</div>
 			</form>
 
 			<div class="login-cover"></div>
 		</div>
-
-		<!-- Scripts -->
-		<script src="config.js"></script>
-		<script src="dist/js/login.js"></script>
-
-		<!-- Option A) Directly load Client Library -->
-		<!-- <script src="https://YOUR-DRIVEWORKS-LIVE-SERVER-URL.COM/DriveworksLiveIntegrationClient.min.js" onload="dwClientLoaded()"></script> -->
-
-		<!-- Option B) Inject Client Library dynamically from server url in config file -->
-		<script>
-			;(function (doc, script) {
-				script = doc.createElement("script")
-				script.src =
-					config.serverUrl + "/DriveWorksLiveIntegrationClient.min.js"
-				script.onload = () => dwClientLoaded() // Custom local function run when client has loaded
-				doc.body.appendChild(script)
-			})(document)
-		</script>
 	</body>
 </html>
+
