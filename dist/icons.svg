@@ -116,4 +116,9 @@
             d="M119,55H73V9c0-4.971-4.029-9-9-9s-9,4.029-9,9v46H9c-4.971,0-9,4.029-9,9s4.029,9,9,9h46v46c0,4.971,4.029,9,9,9s9-4.029,9-9V73h46c4.971,0,9-4.029,9-9S123.971,55,119,55z" />
     </symbol>
 
+    <symbol id="logout" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none">
+        <path stroke-linecap="round" stroke-linejoin="round"
+            d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75">
+        </path>
+    </symbol>
 </svg>
