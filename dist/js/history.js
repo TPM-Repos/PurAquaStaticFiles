@@ -1,4 +1,4 @@
-// Version 1.3.0
+// Version 1.3.1
 /**
  * SPECIFICATION HISTORY
  */
@@ -20,8 +20,9 @@ const runningSpecToggle = document.getElementById("running-spec-toggle")
 const expandToggle = document.getElementById("expand-toggle")
 const resetButton = document.getElementById("filter-reset-button")
 
-let filterDateOrder = 	localStorage.getItem(storageKeyDateOrder) ?? defaultDateOrder
-let runningSpecVisibility = localStorage.getItem(storageKeyRunningSpecVisibility) ?? defaultRunningSpecVisibility
+let filterDateOrder =
+	localStorage.getItem(storageKeyDateOrder) ?? defaultDateOrder
+	let runningSpecVisibility = localStorage.getItem(storageKeyRunningSpecVisibility) ?? defaultRunningSpecVisibility
 let isLoadingHistory = false
 let blockLazyLoading = false
 let expandedView = false

@@ -1,8 +1,8 @@
 // COPY THIS FILE TO 'configUser.js' AND UPDATE THE VALUES TO MATCH YOUR SERVER URL & GROUP ALIAS
-// Version 1.3.0
+// Version 1.3.1
 
 const config = {
-version: "1.3.0",
+version: "1.3.1",
 	// the full path the site running the DriveWorks Live API
 	// serverUrl: "https://dw21.api.yourdomain.com",
 	serverUrl: "",
@@ -37,11 +37,13 @@ version: "1.3.0",
 		// you may put "logout" instead of a page location
 		redirectOnClose: "details.html",
 		redirectOnCancel: "projects.html",
+		showHeader: false,
 	},
 	driveApp: {
 		// you may put "logout" instead of a page location
 		redirectOnClose: "details.html",
 		redirectOnCancel: "drive-apps.html",
+		showHeader: true,
 	},
 	// (Optional) Configure 'Run' view
 	run: {
@@ -116,11 +118,11 @@ version: "1.3.0",
 			icon: "projects",
 			href: "projects.html",
 		},
-		{
-			title: "DriveApps",
-			icon: "drive-apps",
-			href: "drive-apps.html",
-		},
+		// {
+		// 	title: "DriveApps",
+		// 	icon: "drive-apps",
+		// 	href: "drive-apps.html",
+		// },
 		{
 			title: "History",
 			icon: "history",
@@ -192,6 +194,11 @@ version: "1.3.0",
             logoPadding: "1em",
 			textColor: "white",
         },
+		header: {
+			background: "white",
+			height: "30px",
+			textColor: "black",
+		},
         loginForm: {
             background: "white",
             padding: "1em",
@@ -199,8 +206,8 @@ version: "1.3.0",
         },
         button: {
 			// not recommended to use %
-            radius: "0",
-            color: "rgb(59, 87, 149)",
+            radius: "2rem",
+            color: "#00AEEF",
 			textColor: "white",
 			colorHover: "rgb(36, 58, 118)",
 			textColorHover: "white",
@@ -217,4 +224,3 @@ version: "1.3.0",
         inputRadius: "10pt",
     },
 }
-

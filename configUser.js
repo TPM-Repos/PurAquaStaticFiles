@@ -33,11 +33,13 @@ const config = {
 		// you may put "logout" instead of a page location
 		redirectOnClose: "details.html",
 		redirectOnCancel: "projects.html",
+		showHeader: false,
 	},
 	driveApp: {
 		// you may put "logout" instead of a page location
 		redirectOnClose: "details.html",
 		redirectOnCancel: "drive-apps.html",
+		showHeader: true,
 	},
 	// (Optional) Configure 'Run' view
 	run: {
@@ -76,6 +78,7 @@ const config = {
 	// Set whether a username or email address will be used
 	// username | email address
 	usernameType: "username",
+	passwordRequired: false,
 	loginReturnUrls: true, // Toggle appending return urls to restore the previous location when redirected to the login form
 	locale: "en-US", // Set the default locale for displaying dates and numbers
 	dateFormat: {
@@ -189,6 +192,11 @@ const config = {
             logoPadding: "1em",
 			textColor: "black",
         },
+		header: {
+			background: "white",
+			height: "30px",
+			textColor: "black",
+		},
         loginForm: {
             background: "white",
             padding: "1em",

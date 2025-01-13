@@ -1,4 +1,4 @@
-// Version 1.3.0
+// Version 1.3.1
 /**
  * RUNNING SPECIFICATION
  */
@@ -61,9 +61,6 @@ if (QUERY_DRIVE_APP_ALIAS) {
  * Start page functions.
  */
 function startPageFunctions() {
-	// Set username in header
-	showHeaderUsername()
-
 	// Don't Allow Guest's to change the password
 	if (isGuest() && isResetPassword()) {
 		renderError("As a Guest you don't have access to this page", "error")
@@ -950,7 +947,7 @@ function showConfirmationDialog(confirmAction, message = "Are you sure?") {
 	confirmButton.onclick = () => {
 		dialog.classList.add("is-loading")
 		confirmAction()
-		document.removeEventListener("keydown", dismissEscKey)
+		dismissDialog()
 	}
 
 	messageBox.appendChild(confirmButton)
@@ -1017,3 +1014,30 @@ function showHeaderUsername() {
 
 	usernameOutput.innerHTML = username
 }
+
+const profileButton = document.getElementById("profileButton")
+const dropdownMenu = document.getElementById("dropdownMenu")
+
+profileButton.addEventListener("click", (e) => {
+	e.stopPropagation()
+	dropdownMenu.classList.toggle("active")
+
+	// Set dropdown width to match button width
+	const buttonWidth = profileButton.offsetWidth
+	dropdownMenu.style.width = `${buttonWidth}px`
+})
+
+document.addEventListener("click", (e) => {
+	if (!dropdownMenu.contains(e.target)) {
+		dropdownMenu.classList.remove("active")
+	}
+})
+
+// by default the header is shown
+// to hide it we need to set root --header-height to 0
+// we can hide or show it by setting showHeader to true or false
+// we know if this is a project if we have a project name
+if((QUERY_PROJECT_NAME && !config.project.showHeader) || (QUERY_DRIVE_APP_ALIAS && !config.driveApp.showHeader)) {
+	document.querySelector("header").classList.add("hidden");
+}
+
