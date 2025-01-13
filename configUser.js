@@ -56,7 +56,7 @@ const config = {
 	// Enter a default Group Alias and/or Project name to be used (when none are passed in the query string)
 	// Choose how sessions are handled
 	query: {
-		defaultGroupAlias: "",
+		defaultGroupAlias: "PurAquaDEV",
 		defaultProjectName: "",
 		autoLogin: false,
 		requireNewSession: false,
@@ -64,7 +64,7 @@ const config = {
 	},
 	copyright: {
 		show: true,
-		holder: "WestLake Corporation",
+		holder: "PurAqua",
 		year: "2024",
 	},
 	// Add a watermark over pages in order to indicate that the site is a development site
@@ -72,7 +72,7 @@ const config = {
 	watermark: "Development",
 	// Set the title of the site, this will be displayed in the browser tab
 	// pageName | siteName
-	siteName: "WestLake Corporation",
+	siteName: "PurAqua",
 	// Set whether a username or email address will be used
 	// username | email address
 	usernameType: "username",
@@ -125,16 +125,16 @@ const config = {
 		// Here is an example with svgs and with pngs
 		// login: "dist/img/logo-dark.svg",
 		// sidebar: "dist/img/logo-light.svg",
-		login: "dist/img/logo.png",
-		sidebar: "dist/img/logo.png",
+		login: "dist/img/PuraquaLogo_1_1.png",
+		sidebar: "dist/img/PuraquaLogo_1_1.png",
 		// By default the login screen will show a static cover image
 		// You can change it to a different image here.
-		loginCover: "dist/img/login-cover.png",
+		loginCover: "dist/img/brilliance.jpg",
 		// You can use a series of images instead of a static cover image by enabling the carousel
 		// These will fade into the next image every 'interval' seconds
 		// You may use as many as you want but the more you use the longer the page will take to load
 		carousel: {
-			enabled: true,
+			enabled: false,
 			interval: 5,
 			images: [
 				"dist/img/slide1.webp",
