@@ -48,7 +48,24 @@ const config = {
 			scripts: false,
 			styles: false,
 		},
-	},
+	},	projects: {
+		// Hide specific projects by their group alias
+        /* toHide: [
+			{alias: "Group Alias"},
+		], */
+		// add additional links to the projects page
+        /* toAdd: [
+            {
+                alias: "Group Alias",
+                description: "Optional description",
+                image: "dist/img/logo-dark.svg",
+				// this could be an internal link like this
+                link: "run.html?project=Jib Cranes&DWMacroQuickLaunch=700Series",
+				// or an external link like this
+                // link: "https://www.google.com",
+            },
+        ], */
+    },
 	// (Optional) Configure 'Details' view
 	details: {
 		updateInterval: 5, // Interval to refresh content - in seconds
