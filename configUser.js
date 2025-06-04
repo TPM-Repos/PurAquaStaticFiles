@@ -31,9 +31,9 @@ const config = {
 		additionalColumn: {
 			// This is an optional column that can be added to the history table
 			// the label is shown in the table header
-			label: "Quote Number",
+			label: "ID",
 			// the property is the name of the property in the specification object
-			property: "Westlake Quote Number"
+			property: "DWSpecID"
 		},
 	},
 	project: {

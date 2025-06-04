@@ -6,6 +6,11 @@
 const defaultLimit = config.history.specLimitOnPage ?? 10
 const defaultDateOrder = config.history.dateOrder ?? "desc"
 const defaultRunningSpecVisibility = config.history.showRunningSpecs ?? false
+
+const additionalColumn = config.history.additionalColumn ?? false
+const columnLabel = additionalColumn ? additionalColumn.label || "Custom Column" : ""
+const columnProperty = additionalColumn ? additionalColumn.property || "Property not set" : ""
+
 let renderedProperties = []
 
 const storageKeyName = "historyFilterName"
@@ -204,20 +209,44 @@ function generateHistoryItem(specification, index) {
 
 	// Details
 	const details = `
-        <a href="details.html?specification=${specification.id
+	       <a href="details.html?specification=${specification.id
 		}" class="item-details">
-            <h3 class="item-name">${specification.name}</h3>
-            ${status &&
+	           <h3 class="item-name">${specification.name}</h3>
+	           ${status &&
 		`<div class="status"><div class="status-tag status-${normalizeString(
 			status,
 		)}" title="${status}">${splitOnUpperCase(status)}</div></div>`
 		}
-            ${dateEdited && `<div class="edit-date">${dateEdited}</div>`}
-            <div><div class="view-action button">View</div></div>
-        </a>
-    `
+	           ${dateEdited && `<div class="edit-date">${dateEdited}</div>`}
+	           <div><div class="view-action button">View</div></div>
+	       </a>
+	   `
 	itemContent.innerHTML = details
 
+	// Add additional column if configured
+	if (additionalColumn) {
+		// Get the specification properties
+		client.getSpecificationProperties(config.groupAlias, specification.id)
+			.then(properties => {
+				if (!properties) return
+
+				// Find the property value
+				const propertyValue = properties[columnProperty] || ''
+
+				// Create the additional column element
+				const additionalColumnElement = document.createElement('div')
+				additionalColumnElement.classList.add('additional-column')
+				additionalColumnElement.textContent = propertyValue
+
+				// Insert it after the item name
+				const itemDetails = itemContent.querySelector('.item-details')
+				const itemName = itemDetails.querySelector('.item-name')
+				itemDetails.insertBefore(additionalColumnElement, itemName.nextSibling)
+			})
+			.catch(error => {
+				console.error('Error fetching specification properties:', error)
+			})
+	}
 	// Expand Action
 	const expandButton = document.createElement("button")
 	expandButton.classList.add("expand-button")
@@ -300,6 +329,11 @@ async function getSpecificationProperties(specificationId) {
 function generateProperties(properties) {
 	let markup = ""
 	for (const [name, value] of Object.entries(properties)) {
+		// Skip the property if it's shown in the additional column
+		if (additionalColumn && name === columnProperty) {
+			continue;
+		}
+
 		const item = `
             <div class="prop-item prop-${normalizeString(name)}">
                 <div>${name}: </div>
@@ -661,11 +695,7 @@ headerObserver.observe(pageHeader)
 // Add additional column if configured
 function addAdditionalColumn() {
 	// if the additional column exists in the config
-	if (config.history.additionalColumn ?? false) {
-		const additionalColumn = config.history.additionalColumn
-		const columnLabel = additionalColumn.label || "Custom Column"
-		const columnProperty = additionalColumn.property || "Property not set"
-
+	if (additionalColumn) {
 		// Add column header between Name and Status
 		const historyHeadings = document.querySelector('.history-headings .inner')
 		if (historyHeadings) {
@@ -674,49 +704,9 @@ function addAdditionalColumn() {
 			additionalColumnHeader.textContent = columnLabel
 			additionalColumnHeader.classList.add('additional-column-header')
 			historyHeadings.insertBefore(additionalColumnHeader, nameColumn.nextSibling)
-		}
 
-		// Modify the generateHistoryItem function to include the additional column
-		const originalGenerateHistoryItem = generateHistoryItem
-		generateHistoryItem = function (specification, index) {
-			// Call the original function first
-			originalGenerateHistoryItem(specification, index)
-
-			// Get the newly created history item
-			const historyItem = historyList.lastElementChild
-			if (!historyItem) return
-
-			// Get the specification properties
-			client.getSpecificationProperties(config.groupAlias, specification.id)
-				.then(properties => {
-					if (!properties) return
-
-					// Find the property value
-					const propertyValue = properties[columnProperty] || ''
-
-					// Create the additional column element
-					const additionalColumnElement = document.createElement('div')
-					additionalColumnElement.classList.add('additional-column')
-					additionalColumnElement.textContent = propertyValue
-
-					// Insert it after the item name
-					const itemDetails = historyItem.querySelector('.item-details')
-					const itemName = itemDetails.querySelector('.item-name')
-					itemDetails.insertBefore(additionalColumnElement, itemName.nextSibling)
-
-					// Hide the property in the expanded view
-					historyItem.addEventListener('DOMNodeInserted', function (e) {
-						if (e.target.classList && e.target.classList.contains('prop-item')) {
-							const propName = e.target.querySelector('div:first-child')
-							if (propName && propName.textContent === `${columnProperty}: `) {
-								e.target.style.display = 'none'
-							}
-						}
-					}, {once: false})
-				})
-				.catch(error => {
-					console.error('Error fetching specification properties:', error)
-				})
+			// Add a class to the body to indicate additional column is present
+			document.body.classList.add('has-additional-column')
 		}
 	}
 }
