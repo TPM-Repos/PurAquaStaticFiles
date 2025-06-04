@@ -22,7 +22,7 @@ const resetButton = document.getElementById("filter-reset-button")
 
 let filterDateOrder =
 	localStorage.getItem(storageKeyDateOrder) ?? defaultDateOrder
-	let runningSpecVisibility = localStorage.getItem(storageKeyRunningSpecVisibility) ?? defaultRunningSpecVisibility
+let runningSpecVisibility = localStorage.getItem(storageKeyRunningSpecVisibility) ?? defaultRunningSpecVisibility
 let isLoadingHistory = false
 let blockLazyLoading = false
 let expandedView = false
@@ -44,6 +44,9 @@ function startPageFunctions() {
 	// Get last stored query
 	const oDataQueryString = getStoredQuery()
 	getSpecificationsWithQuery(oDataQueryString, true)
+
+	// load additional column if configured
+	addAdditionalColumn()
 }
 
 /**
@@ -201,16 +204,14 @@ function generateHistoryItem(specification, index) {
 
 	// Details
 	const details = `
-        <a href="details.html?specification=${
-			specification.id
+        <a href="details.html?specification=${specification.id
 		}" class="item-details">
             <h3 class="item-name">${specification.name}</h3>
-            ${
-				status &&
-				`<div class="status"><div class="status-tag status-${normalizeString(
-					status,
-				)}" title="${status}">${splitOnUpperCase(status)}</div></div>`
-			}
+            ${status &&
+		`<div class="status"><div class="status-tag status-${normalizeString(
+			status,
+		)}" title="${status}">${splitOnUpperCase(status)}</div></div>`
+		}
             ${dateEdited && `<div class="edit-date">${dateEdited}</div>`}
             <div><div class="view-action button">View</div></div>
         </a>
@@ -656,3 +657,66 @@ const headerObserver = new IntersectionObserver(
 )
 headerObserver.observe(pageHeader)
 
+
+// Add additional column if configured
+function addAdditionalColumn() {
+	// if the additional column exists in the config
+	if (config.history.additionalColumn ?? false) {
+		const additionalColumn = config.history.additionalColumn
+		const columnLabel = additionalColumn.label || "Custom Column"
+		const columnProperty = additionalColumn.property || "Property not set"
+
+		// Add column header between Name and Status
+		const historyHeadings = document.querySelector('.history-headings .inner')
+		if (historyHeadings) {
+			const nameColumn = historyHeadings.querySelector('div:first-child')
+			const additionalColumnHeader = document.createElement('div')
+			additionalColumnHeader.textContent = columnLabel
+			additionalColumnHeader.classList.add('additional-column-header')
+			historyHeadings.insertBefore(additionalColumnHeader, nameColumn.nextSibling)
+		}
+
+		// Modify the generateHistoryItem function to include the additional column
+		const originalGenerateHistoryItem = generateHistoryItem
+		generateHistoryItem = function (specification, index) {
+			// Call the original function first
+			originalGenerateHistoryItem(specification, index)
+
+			// Get the newly created history item
+			const historyItem = historyList.lastElementChild
+			if (!historyItem) return
+
+			// Get the specification properties
+			client.getSpecificationProperties(config.groupAlias, specification.id)
+				.then(properties => {
+					if (!properties) return
+
+					// Find the property value
+					const propertyValue = properties[columnProperty] || ''
+
+					// Create the additional column element
+					const additionalColumnElement = document.createElement('div')
+					additionalColumnElement.classList.add('additional-column')
+					additionalColumnElement.textContent = propertyValue
+
+					// Insert it after the item name
+					const itemDetails = historyItem.querySelector('.item-details')
+					const itemName = itemDetails.querySelector('.item-name')
+					itemDetails.insertBefore(additionalColumnElement, itemName.nextSibling)
+
+					// Hide the property in the expanded view
+					historyItem.addEventListener('DOMNodeInserted', function (e) {
+						if (e.target.classList && e.target.classList.contains('prop-item')) {
+							const propName = e.target.querySelector('div:first-child')
+							if (propName && propName.textContent === `${columnProperty}: `) {
+								e.target.style.display = 'none'
+							}
+						}
+					}, {once: false})
+				})
+				.catch(error => {
+					console.error('Error fetching specification properties:', error)
+				})
+		}
+	}
+}
