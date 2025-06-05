@@ -180,7 +180,8 @@ button {
 
 .history-headings .inner {
 	display: flex;
-	padding-right: 4em;
+	padding-right: 5em;
+	/* Increased to account for the View button column */
 }
 
 .history-headings .inner>* {
@@ -188,11 +189,34 @@ button {
 	padding: 0 0.5em;
 	opacity: 0.75;
 	white-space: nowrap;
+	text-align: left;
+	/* Default alignment */
 }
 
 .history-headings .inner>*:first-child {
 	flex: 2;
 	padding-left: 0;
+}
+
+/* Specific alignment for each heading to match content */
+.history-headings .inner>*:nth-child(1) {
+	/* NAME */
+	text-align: left;
+}
+
+.history-headings .inner>*:nth-child(2) {
+	/* ID (additional column) */
+	text-align: left;
+}
+
+.history-headings .inner>*:nth-child(3) {
+	/* STATUS */
+	text-align: center;
+}
+
+.history-headings .inner>*:nth-child(4) {
+	/* LAST EDITED */
+	text-align: left;
 }
 
 /* History List */
@@ -297,6 +321,12 @@ button {
 .history-item .status {
 	line-height: 1;
 	overflow: hidden;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	/* Center the status tag horizontally */
+	align-items: center;
+	/* Center vertically */
 }
 
 .history-item .status-tag {
@@ -611,4 +641,30 @@ button {
 
 .additional-column-header {
 	font-weight: 600;
+	text-align: left;
+}
+
+/* Ensure proper alignment of all columns */
+.history-item .item-details {
+	align-items: center;
+	/* Vertically center all items */
+}
+
+
+.history-item .edit-date {
+	text-align: left;
+	/* Align date to the left */
+}
+
+/* Ensure the View button is properly aligned */
+.history-item .item-details>*:last-child {
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+/* Ensure the View button itself is centered */
+.history-item .view-action {
+	margin: 0 auto;
 }
