@@ -180,13 +180,18 @@ button {
 
 .history-headings .inner {
 	display: flex;
-	padding-right: 5em;
-	/* Increased to account for the View button column */
+	padding-left: 1.5em;
+	/* Calculate exact padding-right based on the width of expand button and view button */
+	padding-right: calc(56px + 94.61px);
+	/*
+	   Expand button: 3em (1em icon + 0.5em left padding + 1.5em right padding)
+	   View button: 4.75em (2.5em "View" text + 0.75em left padding + 1.5em right padding)
+	*/
 }
 
 .history-headings .inner>* {
 	flex: 1;
-	padding: 0 0.5em;
+	padding: 0;
 	opacity: 0.75;
 	white-space: nowrap;
 	text-align: left;
@@ -658,6 +663,7 @@ button {
 
 /* Ensure the View button is properly aligned */
 .history-item .item-details>*:last-child {
+	flex: none;
 	text-align: center;
 	display: flex;
 	justify-content: center;
